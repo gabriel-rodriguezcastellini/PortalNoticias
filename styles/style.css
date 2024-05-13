@@ -10,7 +10,6 @@ body {
 header,
 main,
 footer {
-  max-width: 1200px;
   margin: 0 auto;
   padding: 20px;
 }
@@ -72,12 +71,12 @@ header h1 {
 
 .seccion-izquierda,
 .seccion-derecha {
-  width: 30%;
+  width: 25%;
   padding: 20px;
 }
 
 .seccion-central {
-  width: 40%;
+  width: 50%;
   padding: 20px;
 }
 
@@ -111,6 +110,11 @@ header h1 {
   .grid-noticias,
   .grid-publicidad {
     flex-direction: column;
+  }
+
+  .contenedor-header {
+    display: flex;
+    justify-content: flex-end;
   }
 }
 
