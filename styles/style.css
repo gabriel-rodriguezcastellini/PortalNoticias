@@ -14,6 +14,10 @@ footer {
   padding: 20px;
 }
 
+img {
+  max-width: 100%;
+}
+
 /* Cabecera */
 
 header {
@@ -168,8 +172,4 @@ footer {
     display: flex;
     justify-content: flex-end;
   }
-}
-
-img {
-  max-width: 100%;
 }
