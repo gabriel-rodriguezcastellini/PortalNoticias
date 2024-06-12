@@ -225,29 +225,85 @@ document.addEventListener("DOMContentLoaded", function () {
 
     if (formIsValid) {
       var formData = {
-        "Nombre Completo": fullNameInput.value.trim(),
-        Email: emailInput.value.trim(),
-        Edad: ageInput.value.trim(),
-        Teléfono: phoneInput.value.trim(),
-        Dirección: addressInput.value.trim(),
-        Ciudad: cityInput.value.trim(),
-        "Código Postal": postalCodeInput.value.trim(),
-        DNI: dniInput.value.trim(),
+        name: fullNameInput.value.trim(),
+        email: emailInput.value.trim(),
+        password: passwordInput.value,
+        age: ageInput.value.trim(),
+        phone: phoneInput.value.trim(),
+        address: addressInput.value.trim(),
+        city: cityInput.value.trim(),
+        postalCode: postalCodeInput.value.trim(),
+        dni: dniInput.value.trim(),
       };
 
-      var formDataStr = "";
-      for (var key in formData) {
-        if (formData.hasOwnProperty(key)) {
-          formDataStr += key + ": " + formData[key] + "\n";
-        }
-      }
-
-      alert("Formulario enviado correctamente:\n\n" + formDataStr);
+      fetch("https://jsonplaceholder.typicode.com/users", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(formData),
+      })
+        .then((response) => {
+          if (!response.ok) {
+            throw new Error("La solicitud ha fallado.");
+          }
+          return response.json();
+        })
+        .then((data) => {
+          showModal("Suscripción exitosa", JSON.stringify(data));
+          localStorage.setItem("subscriptionData", JSON.stringify(data));
+        })
+        .catch((error) => {
+          showModal("Error en la suscripción", error.message);
+        });
     } else {
       event.preventDefault();
       var errorMessageStr = "Por favor, corrija los siguientes errores:\n\n";
       errorMessageStr += errorMessages.join("\n");
       alert(errorMessageStr);
+    }
+  };
+
+  function showModal(title, message) {
+    var modal = document.createElement("div");
+    modal.className = "modal";
+    modal.innerHTML = `
+      <div class="modal-content">
+        <span class="close-button">&times;</span>
+        <h2>${title}</h2>
+        <p>${message}</p>
+      </div>
+    `;
+    document.body.appendChild(modal);
+
+    var closeButton = modal.querySelector(".close-button");
+    closeButton.onclick = function () {
+      modal.style.display = "none";
+      document.body.removeChild(modal);
+    };
+
+    modal.style.display = "block";
+    modal.style.position = "fixed";
+    modal.style.zIndex = "1000";
+    modal.style.left = "50%";
+    modal.style.top = "50%";
+    modal.style.transform = "translate(-50%, -50%)";
+  }
+
+  window.onload = function () {
+    var storedData = localStorage.getItem("subscriptionData");
+    if (storedData) {
+      var parsedData = JSON.parse(storedData);
+      fullNameInput.value = parsedData.name || "";
+      emailInput.value = parsedData.email || "";
+      passwordInput.value = "";
+      confirmPasswordInput.value = "";
+      ageInput.value = parsedData.age || "";
+      phoneInput.value = parsedData.phone || "";
+      addressInput.value = parsedData.address || "";
+      cityInput.value = parsedData.city || "";
+      postalCodeInput.value = parsedData.postalCode || "";
+      dniInput.value = parsedData.dni || "";
     }
   };
 });
